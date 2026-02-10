@@ -1,13 +1,10 @@
 import {
   AbsoluteFill,
   useCurrentFrame,
-  useVideoConfig,
   Img,
   Audio,
   interpolate,
   Easing,
-  staticFile,
-  Sequence,
 } from "remotion";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 import { loadFont as loadSpaceGrotesk } from "@remotion/google-fonts/SpaceGrotesk";
@@ -19,57 +16,57 @@ import {
   PushStream,
   FadeInWords,
   FadeInChars,
-  BounceChars,
   Counter,
   BrowserMockup,
   Camera,
-  Particles,
-  Glow,
-  GridBackground,
 } from "../library";
 
 // ============================================
 // Brand Constants
 // ============================================
 const BRAND = {
-  primary: "#9F5FFE",
-  primaryDark: "#7C3AED",
+  primary: "#D7B8FF", // Outrank's lavender accent
+  primaryDark: "#B794F6", // Darker lavender
   accent: "#22C55E",
-  dark: "#0a0a0f",
-  darkAlt: "#111118",
+  dark: "#0D0D12", // Outrank's dark text color
+  darkAlt: "#1a1a24",
   light: "#ffffff",
-  lightAlt: "#f5f5f7",
+  lightAlt: "#f8f8fc",
   gray: "#6B7280",
+  textPrimary: "#363D4F", // Outrank's primary text
   error: "#EF4444",
 };
 
 const ASSETS = {
-  screenshot: "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/outrank/1770749485761_8usb3wev728_outrank_screenshot.png",
-  aiAbstract: "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/outrank/1770749496278_kud9z9xrqhl_ai_automation_abstract.png",
-  music: "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/music/1770749518831_ubk8w8cvv8n_music_Premium_corporate_te.mp3",
+  screenshot:
+    "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/outrank/1770749710644_qy562xwpbrl_outrank_screenshot.png",
+  aiAbstract:
+    "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/outrank/1770749728303_tsj1xmjdn6h_ai_automation_visual.png",
+  music:
+    "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/music/1770749518831_ubk8w8cvv8n_music_Premium_corporate_te.mp3",
 };
 
 // ============================================
 // Shared Components
 // ============================================
-const FloatingOrb = ({ 
-  x, 
-  y, 
-  size, 
-  color, 
-  delay = 0 
-}: { 
-  x: number; 
-  y: number; 
-  size: number; 
-  color: string; 
+const FloatingOrb = ({
+  x,
+  y,
+  size,
+  color,
+  delay = 0,
+}: {
+  x: number;
+  y: number;
+  size: number;
+  color: string;
   delay?: number;
 }) => {
   const frame = useCurrentFrame();
   const floatY = Math.sin((frame + delay) / 25) * 8;
   const floatX = Math.cos((frame + delay) / 35) * 5;
   const scale = 1 + Math.sin((frame + delay) / 40) * 0.1;
-  
+
   return (
     <div
       style={{
@@ -89,14 +86,20 @@ const FloatingOrb = ({
 
 const DarkBackground = ({ children }: { children: React.ReactNode }) => {
   const frame = useCurrentFrame();
-  
+
   return (
     <AbsoluteFill style={{ backgroundColor: BRAND.dark }}>
       {/* Animated gradient orbs */}
       <FloatingOrb x={20} y={30} size={400} color={BRAND.primary} delay={0} />
-      <FloatingOrb x={70} y={60} size={350} color={BRAND.primaryDark} delay={50} />
+      <FloatingOrb
+        x={70}
+        y={60}
+        size={350}
+        color={BRAND.primaryDark}
+        delay={50}
+      />
       <FloatingOrb x={85} y={20} size={250} color={BRAND.accent} delay={100} />
-      
+
       {/* Subtle grid */}
       <div
         style={{
@@ -104,7 +107,9 @@ const DarkBackground = ({ children }: { children: React.ReactNode }) => {
           inset: 0,
           backgroundImage: `linear-gradient(${BRAND.primary}08 1px, transparent 1px), linear-gradient(90deg, ${BRAND.primary}08 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
-          opacity: interpolate(frame, [0, 30], [0, 0.5], { extrapolateRight: "clamp" }),
+          opacity: interpolate(frame, [0, 30], [0, 0.5], {
+            extrapolateRight: "clamp",
+          }),
         }}
       />
       {children}
@@ -113,8 +118,6 @@ const DarkBackground = ({ children }: { children: React.ReactNode }) => {
 };
 
 const LightBackground = ({ children }: { children: React.ReactNode }) => {
-  const frame = useCurrentFrame();
-  
   return (
     <AbsoluteFill style={{ backgroundColor: BRAND.lightAlt }}>
       {/* Soft gradient accents */}
@@ -162,7 +165,7 @@ const LightBackground = ({ children }: { children: React.ReactNode }) => {
 // Scene 1: Hook - Bold KineticStream
 const HookScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
-  
+
   return (
     <Camera
       keyframes={[
@@ -198,7 +201,7 @@ const AmplifyScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
   const { fontFamily: bodyFont } = loadInter();
   const frame = useCurrentFrame();
-  
+
   return (
     <Camera
       keyframes={[
@@ -226,7 +229,7 @@ const AmplifyScene = () => {
           >
             All on Auto-Pilot
           </FadeInWords>
-          
+
           <div style={{ opacity: frame >= 25 ? 1 : 0 }}>
             <FadeInChars
               startFrom={25}
@@ -252,9 +255,9 @@ const ProblemScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
   const { fontFamily: bodyFont } = loadInter();
   const frame = useCurrentFrame();
-  
+
   const shakeX = frame < 45 ? Math.sin(frame * 0.8) * 2 : 0;
-  
+
   return (
     <Camera
       keyframes={[
@@ -284,7 +287,7 @@ const ProblemScene = () => {
           >
             Still writing SEO content manually?
           </FadeInWords>
-          
+
           <div style={{ opacity: frame >= 30 ? 1 : 0 }}>
             <FadeInChars
               startFrom={30}
@@ -309,16 +312,16 @@ const ProblemScene = () => {
 const SolutionIntroScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
   const frame = useCurrentFrame();
-  
+
   const logoScale = interpolate(frame, [0, 20], [0.8, 1], {
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.back(1.5)),
   });
-  
+
   const logoOpacity = interpolate(frame, [0, 15], [0, 1], {
     extrapolateRight: "clamp",
   });
-  
+
   return (
     <Camera
       keyframes={[
@@ -355,7 +358,7 @@ const SolutionIntroScene = () => {
               <span style={{ color: BRAND.gray }}>.so</span>
             </div>
           </div>
-          
+
           <div style={{ opacity: frame >= 25 ? 1 : 0 }}>
             <FadeInWords
               startFrom={25}
@@ -380,22 +383,22 @@ const SolutionIntroScene = () => {
 const FeatureDemoScene = () => {
   const { fontFamily: bodyFont } = loadInter();
   const frame = useCurrentFrame();
-  
+
   const mockupScale = interpolate(frame, [0, 25], [0.9, 1], {
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
   });
-  
+
   const mockupY = interpolate(frame, [0, 25], [30, 0], {
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
   });
-  
+
   const rotateY = interpolate(frame, [0, 120], [-5, 5], {
     extrapolateRight: "clamp",
-    easing: Easing.inOut(Easing.sine),
+    easing: Easing.inOut(Easing.sin),
   });
-  
+
   return (
     <Camera
       keyframes={[
@@ -436,7 +439,7 @@ const FeatureDemoScene = () => {
               />
             </BrowserMockup>
           </div>
-          
+
           {/* Feature badges */}
           <div
             style={{
@@ -449,25 +452,27 @@ const FeatureDemoScene = () => {
               transition: "all 0.3s",
             }}
           >
-            {["Keyword Research", "SERP Analysis", "Auto-Publish"].map((label, i) => (
-              <div
-                key={label}
-                style={{
-                  fontFamily: bodyFont,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: BRAND.dark,
-                  background: BRAND.light,
-                  padding: "10px 20px",
-                  borderRadius: 100,
-                  boxShadow: `0 4px 20px ${BRAND.dark}15`,
-                  opacity: frame >= 40 + i * 8 ? 1 : 0,
-                  transform: `translateY(${frame >= 40 + i * 8 ? 0 : 10}px)`,
-                }}
-              >
-                {label}
-              </div>
-            ))}
+            {["Keyword Research", "SERP Analysis", "Auto-Publish"].map(
+              (label, i) => (
+                <div
+                  key={label}
+                  style={{
+                    fontFamily: bodyFont,
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: BRAND.dark,
+                    background: BRAND.light,
+                    padding: "10px 20px",
+                    borderRadius: 100,
+                    boxShadow: `0 4px 20px ${BRAND.dark}15`,
+                    opacity: frame >= 40 + i * 8 ? 1 : 0,
+                    transform: `translateY(${frame >= 40 + i * 8 ? 0 : 10}px)`,
+                  }}
+                >
+                  {label}
+                </div>
+              ),
+            )}
           </div>
         </AbsoluteFill>
       </LightBackground>
@@ -480,13 +485,13 @@ const BenefitsScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
   const { fontFamily: bodyFont } = loadInter();
   const frame = useCurrentFrame();
-  
+
   const benefits = [
     { icon: "⚡", text: "10x Faster Content" },
     { icon: "🎯", text: "SEO-Optimized" },
     { icon: "🔄", text: "Auto Publishing" },
   ];
-  
+
   return (
     <Camera
       keyframes={[
@@ -514,7 +519,7 @@ const BenefitsScene = () => {
           >
             Scale Your Organic Traffic
           </FadeInWords>
-          
+
           <div
             style={{
               display: "flex",
@@ -531,7 +536,7 @@ const BenefitsScene = () => {
                 extrapolateRight: "clamp",
                 easing: Easing.out(Easing.back(1.5)),
               });
-              
+
               return (
                 <div
                   key={benefit.text}
@@ -573,12 +578,12 @@ const BenefitsScene = () => {
 const MagicMomentScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
   const frame = useCurrentFrame();
-  
+
   const imageScale = interpolate(frame, [0, 120], [1.05, 1.15], {
     extrapolateRight: "clamp",
-    easing: Easing.inOut(Easing.sine),
+    easing: Easing.inOut(Easing.sin),
   });
-  
+
   return (
     <AbsoluteFill>
       {/* Full-bleed AI abstract image */}
@@ -592,7 +597,7 @@ const MagicMomentScene = () => {
           transform: `scale(${imageScale})`,
         }}
       />
-      
+
       {/* Gradient overlay for text readability */}
       <div
         style={{
@@ -601,7 +606,7 @@ const MagicMomentScene = () => {
           background: `linear-gradient(to top, ${BRAND.dark}dd 0%, ${BRAND.dark}60 40%, transparent 100%)`,
         }}
       />
-      
+
       {/* Text content */}
       <AbsoluteFill
         style={{
@@ -635,7 +640,7 @@ const StatsScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
   const { fontFamily: bodyFont } = loadInter();
   const frame = useCurrentFrame();
-  
+
   return (
     <Camera
       keyframes={[
@@ -671,7 +676,7 @@ const StatsScene = () => {
               }}
             />
           </div>
-          
+
           <div style={{ opacity: frame >= 20 ? 1 : 0 }}>
             <FadeInWords
               startFrom={20}
@@ -686,7 +691,7 @@ const StatsScene = () => {
               Articles Created & Published
             </FadeInWords>
           </div>
-          
+
           {/* Star rating */}
           <div
             style={{
@@ -731,7 +736,7 @@ const StatsScene = () => {
 // Scene 9: Tagline
 const TaglineScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
-  
+
   return (
     <Camera
       keyframes={[
@@ -767,15 +772,15 @@ const CTAScene = () => {
   const { fontFamily: headingFont } = loadSpaceGrotesk();
   const { fontFamily: bodyFont } = loadInter();
   const frame = useCurrentFrame();
-  
+
   const logoScale = interpolate(frame, [0, 20], [0.8, 1], {
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.back(1.5)),
   });
-  
+
   const buttonPulse = 1 + Math.sin(frame / 15) * 0.03;
   const buttonGlow = interpolate(Math.sin(frame / 20), [-1, 1], [40, 60]);
-  
+
   return (
     <Camera
       keyframes={[
@@ -805,7 +810,7 @@ const CTAScene = () => {
             <span style={{ color: BRAND.primary }}>Outrank</span>
             <span style={{ color: BRAND.gray }}>.so</span>
           </div>
-          
+
           {/* CTA Button */}
           <div
             style={{
@@ -829,7 +834,7 @@ const CTAScene = () => {
               Start Free Today →
             </div>
           </div>
-          
+
           {/* Subtext */}
           <div
             style={{
@@ -852,125 +857,125 @@ const CTAScene = () => {
 // Main Composition
 // ============================================
 export const Main: React.FC = () => {
-  const { fps } = useVideoConfig();
-  
   // Scene durations in frames (30fps)
   // Total: ~32 seconds
   const SCENE_DURATION = {
-    hook: 90,           // 3s
-    amplify: 75,        // 2.5s
-    problem: 90,        // 3s
-    solutionIntro: 80,  // 2.67s
-    featureDemo: 120,   // 4s
-    benefits: 90,       // 3s
-    magicMoment: 100,   // 3.33s
-    stats: 90,          // 3s
-    tagline: 90,        // 3s
-    cta: 120,           // 4s - longer ending
+    hook: 90, // 3s
+    amplify: 75, // 2.5s
+    problem: 90, // 3s
+    solutionIntro: 80, // 2.67s
+    featureDemo: 120, // 4s
+    benefits: 90, // 3s
+    magicMoment: 100, // 3.33s
+    stats: 90, // 3s
+    tagline: 90, // 3s
+    cta: 120, // 4s - longer ending
   };
-  
+
   const TRANSITION_DURATION = 12;
-  
+
   return (
     <AbsoluteFill style={{ backgroundColor: BRAND.dark }}>
       {/* Background music */}
-      <Audio
-        src={ASSETS.music}
-        volume={0.4}
-        startFrom={0}
-      />
-      
+      <Audio src={ASSETS.music} volume={0.4} startFrom={0} />
+
       <TransitionSeries>
         {/* Scene 1: Hook */}
         <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.hook}>
           <HookScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("flashBlack")}
           timing={createTiming("snappy", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 2: Amplify */}
         <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.amplify}>
           <AmplifyScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("glitch")}
           timing={createTiming("snappy", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 3: Problem */}
         <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.problem}>
           <ProblemScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("zoomIn")}
           timing={createTiming("spring", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 4: Solution Intro */}
-        <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.solutionIntro}>
+        <TransitionSeries.Sequence
+          durationInFrames={SCENE_DURATION.solutionIntro}
+        >
           <SolutionIntroScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("slideLeft")}
           timing={createTiming("smooth", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 5: Feature Demo */}
-        <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.featureDemo}>
+        <TransitionSeries.Sequence
+          durationInFrames={SCENE_DURATION.featureDemo}
+        >
           <FeatureDemoScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("whipPan")}
           timing={createTiming("snappy", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 6: Benefits */}
         <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.benefits}>
           <BenefitsScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("blurDissolve")}
           timing={createTiming("smooth", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 7: Magic Moment */}
-        <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.magicMoment}>
+        <TransitionSeries.Sequence
+          durationInFrames={SCENE_DURATION.magicMoment}
+        >
           <MagicMomentScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("zoomOut")}
           timing={createTiming("spring", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 8: Stats */}
         <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.stats}>
           <StatsScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("flashBlack")}
           timing={createTiming("snappy", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 9: Tagline */}
         <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.tagline}>
           <TaglineScene />
         </TransitionSeries.Sequence>
-        
+
         <TransitionSeries.Transition
           presentation={getPresentation("blurDissolve")}
           timing={createTiming("smooth", TRANSITION_DURATION)}
         />
-        
+
         {/* Scene 10: CTA */}
         <TransitionSeries.Sequence durationInFrames={SCENE_DURATION.cta}>
           <CTAScene />
